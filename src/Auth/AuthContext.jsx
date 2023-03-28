@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, db } from "../Firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { Timestamp, doc, setDoc } from "firebase/firestore";
 // create context
 const AuthContext = createContext();
 
@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
       email: user.email,
       avatar: user.photoURL,
       uid: user.uid,
+      timeStamp: Timestamp,
     };
     await setDoc(userRef, userData, { merge: true });
   };
