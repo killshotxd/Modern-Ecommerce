@@ -10,7 +10,6 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      localStorage.removeItem("ProductsLength");
       navigate("/");
     } catch (error) {
       console.error();
