@@ -70,7 +70,7 @@ export const SignIn = () => {
         <div className="w-full h-full">
           <img
             className="w-full h-full mx-auto object-cover"
-            src="https://images.unsplash.com/photo-1630673245362-f69d2b93880e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+            src="https://cdn.shopify.com/shopifycloud/brochure/assets/landers/ppc/ecommerce/hero-small-accdfa5d4628cee00ae2a5c2694e164c1eec8b247143f59ad27dfdb232c8d819.png"
             alt=""
           />
         </div>
