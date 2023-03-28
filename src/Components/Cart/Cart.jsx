@@ -1,54 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
-
+import { db } from "../../Firebase";
+import {
+  QuerySnapshot,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
+import { UserAuth } from "../../Auth/AuthContext";
 const Cart = () => {
-  const products = [
-    {
-      id: 1,
-      name: "APPLE iPhone 11 (White, 128 GB)",
-      href: "#",
-      price: "₹47,199",
-      originalPrice: "₹48,900",
-      discount: "5% Off",
-      color: "White",
-      size: "6.1 inch",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/shopping-cart/iphone-11-256-u-mwm82hn-a-apple-0-original-imafkg25mhaztxns.jpeg?q=90",
-    },
-    {
-      id: 2,
-      name: "Syska 20000 mAh Power Bank",
-      href: "#",
-      price: "₹1,549",
-      originalPrice: "₹2,499",
-      discount: "38% off",
-      color: "Black",
-      leadTime: "3-4 weeks",
-      size: "20000 mAh",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/shopping-cart/p2024j-bk-p2024j-20000-syska-original-imafz4zuunbw3mfu.jpeg?q=70",
-    },
-    {
-      id: 3,
-      name: "Back Cover for Apple Iphone 11",
-      href: "#",
-      price: "₹219 ",
-      originalPrice: "₹999",
-      discount: "78% off",
-      color: "Black",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/shopping-cart/linetpu-029-012-101-gadgetm-original-imag7ayekbkvfu4f.jpeg?q=70",
-    },
-  ];
+  const [products, setProducts] = useState();
+  const { currentUser } = UserAuth();
 
-  let productLength = localStorage.setItem("ProductsLength", products.length);
+  const getCartItem = async () => {
+    const { uid, displayName } = currentUser;
+    const cartItemRef = await collection(db, "cart", `${uid}/items`);
+    const querySnapshot = await getDocs(cartItemRef);
+    const products = querySnapshot.docs.map((doc) => ({
+      did: doc.id,
+      ...doc.data(),
+    }));
+    console.log(products);
+    localStorage.setItem("prLen", products.length);
+
+    setProducts(products);
+
+    return products;
+  };
+
+  const removeItem = async (did) => {
+    console.log(did);
+    const { uid } = currentUser;
+    const cartItemRef = doc(db, "cart", `${uid}/items`, did);
+    try {
+      await deleteDoc(cartItemRef);
+      console.log(`Item with ID ${did} successfully removed from cart!`);
+      getCartItem();
+    } catch (error) {
+      console.error("Error removing item from cart: ", error);
+    }
+  };
+
+  useEffect(() => {
+    getCartItem();
+  }, []);
+
   return (
     <>
       <Header />
       <div className="flex flex-col mx-auto max-w-3xl p-6 space-y-4 sm:p-10 dark:bg-gray-900 dark:text-gray-100">
         <h2 className="text-xl font-semibold">Your cart</h2>
         <ul className="flex flex-col divide-y divide-gray-700">
-          {products.map((product) => (
+          {products?.map((product) => (
             <li
               key={product.id}
               className="flex flex-col py-6 sm:flex-row sm:justify-between"
@@ -75,6 +83,9 @@ const Cart = () => {
                   </div>
                   <div className="flex text-sm divide-x">
                     <button
+                      onClick={() => {
+                        removeItem(product.did);
+                      }}
                       type="button"
                       className="flex items-center px-2 py-1 pl-0 space-x-1"
                     >
