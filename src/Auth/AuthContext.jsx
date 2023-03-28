@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
       email: user.email,
       avatar: user.photoURL,
       uid: user.uid,
-      timeStamp: Timestamp,
     };
     await setDoc(userRef, userData, { merge: true });
   };

@@ -1,15 +1,33 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { UserAuth } from "../../Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 export const SignIn = () => {
+  const navigate = useNavigate();
+  const { currentUser, signInGoogle } = UserAuth();
+
+  const handleLogin = async () => {
+    try {
+      await signInGoogle();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/home");
+    } else return;
+  }, [currentUser]);
+
   return (
     <section className="containerWrap" style={{ marginTop: "8rem" }}>
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <div className="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-8 sm:py-16 lg:py-24">
           <div className="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
             <h2 className="text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl">
-              Sign in
+              Modern E-commerce
             </h2>
-            <p className="mt-2 text-base text-gray-600 dark:text-gray-300">
+            {/* <p className="mt-2 text-base text-gray-600 dark:text-gray-300">
               Don&apos;t have an account?{" "}
               <a
                 href="#"
@@ -18,10 +36,18 @@ export const SignIn = () => {
               >
                 Create a free account
               </a>
+            </p> */}
+            <p className="mt-2 text-base text-gray-600 dark:text-gray-300">
+              Your one-stop shop - sign in to start.
+            </p>
+            <p className="mt-2 text-base text-gray-600 dark:text-gray-300">
+              Revolutionize your shopping experience with our modern e-commerce
+              web app. Discover, shop, and save with ease.
             </p>
 
             <div className="mt-3 space-y-3">
               <button
+                onClick={handleLogin}
                 type="button"
                 className="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 dark:text-gray-400 transition-all duration-200 bg-white border border-gray-500 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
               >
@@ -36,23 +62,6 @@ export const SignIn = () => {
                   </svg>
                 </div>
                 Sign in with Google
-              </button>
-
-              <button
-                type="button"
-                className="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 dark:text-gray-400 transition-all duration-200 bg-white border border-gray-500 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
-              >
-                <div className="absolute inset-y-0 left-0 p-4">
-                  <svg
-                    className="w-6 h-6 text-[#2563EB]"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
-                  </svg>
-                </div>
-                Sign in with Facebook
               </button>
             </div>
           </div>
