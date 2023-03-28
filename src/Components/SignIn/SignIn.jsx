@@ -61,7 +61,7 @@ export const SignIn = () => {
         <div className="w-full h-full">
           <img
             className="w-full h-full mx-auto object-cover"
-            src="https://images.unsplash.com/photo-1630673245362-f69d2b93880e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+            src="https://www.pexels.com/photo/shopping-bags-from-online-shopping-on-brown-wooden-table-with-laptop-6956922/"
             alt=""
           />
         </div>
