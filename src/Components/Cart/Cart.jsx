@@ -25,7 +25,7 @@ const Cart = () => {
       did: doc.id,
       ...doc.data(),
     }));
-    console.log(products);
+
     localStorage.setItem("prLen", products.length);
 
     setProducts(products);
@@ -39,7 +39,7 @@ const Cart = () => {
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     try {
       await deleteDoc(cartItemRef);
-      console.log(`Item with ID ${did} successfully removed from cart!`);
+
       getCartItem();
     } catch (error) {
       console.error("Error removing item from cart: ", error);
@@ -52,7 +52,7 @@ const Cart = () => {
 
   return (
     <>
-      <Header />
+      <Header products={products} />
       <div className="flex flex-col mx-auto max-w-3xl p-6 space-y-4 sm:p-10 dark:bg-gray-900 dark:text-gray-100">
         <h2 className="text-xl font-semibold">Your cart</h2>
         <ul className="flex flex-col divide-y divide-gray-700">

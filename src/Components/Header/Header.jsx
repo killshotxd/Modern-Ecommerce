@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { UserAuth } from "../../Auth/AuthContext";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-const Header = () => {
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../Firebase";
+const Header = ({ products }) => {
   const { currentUser, logout } = UserAuth();
   const [productLength, setProductLength] = useState();
   console.log(currentUser);
@@ -18,14 +20,22 @@ const Header = () => {
     }
   };
 
-  const length = localStorage.getItem("prLen");
+  const getCartItem = async () => {
+    let cartItemRef = await collection(db, "cart", `${currentUser.uid}/items`);
+    let querySnapshot = await getDocs(cartItemRef);
+    let products = querySnapshot.docs.map((doc) => ({
+      did: doc.id,
+      ...doc.data(),
+    }));
 
-  const productLengthF = async () => {
-    await setProductLength(length);
+    localStorage.setItem("prLen", products.length);
+    setProductLength(products?.length);
+    return products;
   };
+
   useEffect(() => {
-    productLengthF();
-  }, [setProductLength]);
+    getCartItem();
+  }, [products]);
 
   return (
     <>

@@ -12,10 +12,14 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { UserAuth } from "../../Auth/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const [products, setProducts] = useState();
+  const [cartItemLength, setCartItemLength] = useState();
   const { currentUser } = UserAuth();
+
   const getProducts = async () => {
     const q = collection(db, "products");
     const querySnapshot = await getDocs(q);
@@ -40,14 +44,13 @@ const Home = () => {
       did: doc.id,
       ...doc.data(),
     }));
-    console.log(products.length);
-    localStorage.setItem("prLen", products.length);
 
+    localStorage.setItem("prLen", products.length);
+    setCartItemLength(products?.length);
     return products;
   };
 
   const addToCart = async (product) => {
-    console.log(product);
     try {
       const { uid, displayName } = currentUser;
       const cartData = {
@@ -65,9 +68,9 @@ const Home = () => {
         addedById: uid,
         addedByName: displayName,
       };
-      console.log(cartData);
 
       await addDoc(collection(db, "cart", `${uid}/items`), cartData);
+      toast("Item added to cart!");
       getCartItem();
     } catch (error) {
       console.log(error);
@@ -76,7 +79,8 @@ const Home = () => {
 
   return (
     <>
-      <Header />
+      <ToastContainer />
+      <Header products={cartItemLength} />
       <div className="grid px-2 grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:mt-10">
         {products?.map((product) => (
           <div
