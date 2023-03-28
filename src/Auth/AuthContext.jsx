@@ -6,7 +6,13 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, db } from "../Firebase";
-import { Timestamp, doc, setDoc } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 // create context
 const AuthContext = createContext();
 
@@ -36,13 +42,6 @@ export const AuthProvider = ({ children }) => {
     signOut(auth);
   };
 
-  const value = {
-    currentUser,
-    setCurrentUser,
-    signInGoogle,
-    logout,
-  };
-
   //   set current User
 
   useEffect(() => {
@@ -52,6 +51,13 @@ export const AuthProvider = ({ children }) => {
     });
     return unsubscribe;
   }, []);
+
+  const value = {
+    currentUser,
+    setCurrentUser,
+    signInGoogle,
+    logout,
+  };
 
   return (
     <AuthContext.Provider value={value}>

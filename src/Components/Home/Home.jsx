@@ -1,54 +1,84 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
+import { db } from "../../Firebase";
+import {
+  QuerySnapshot,
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
+import { UserAuth } from "../../Auth/AuthContext";
 
 const Home = () => {
-  const products = [
-    {
-      id: 1,
-      brand: "Apple",
-      name: "APPLE iPhone 13 (Midnight, 128 GB)",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/products/iphone-13-mlpf3hn-a-apple-original-imag6vzz5qvejz8z.jpeg?q=70",
-      href: "#",
-      price: "₹61,999",
-      color: "Midnight",
-      imageAlt: "APPLE iPhone 13 (Midnight, 128 GB)",
-      quantity: 1,
-      ratings: "12,873",
-    },
-    {
-      id: 2,
-      brand: "Apple",
-      name: "APPLE Airpods Pro Bluetooth Headset",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/products/mwp22hn-a-apple-original-imag3qe9eqkfhmg8.jpeg?q=70",
-      href: "#",
-      price: "₹22,500",
-      color: "White, True Wireless",
-      imageAlt: "APPLE Airpods Pro Bluetooth Headset",
-      quantity: 1,
-      ratings: "8,381",
-    },
-    {
-      id: 3,
-      brand: "Apple",
-      name: "APPLE iPad (9th Gen) 64 GB ROM 10.2 inch",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/products/mk2k3hn-a-apple-original-imag6yy7xjjugz4w.jpeg?q=70",
-      href: "#",
-      price: "₹29,900",
-      color: "Space Grey",
-      imageAlt: "APPLE iPad (9th Gen) 64 GB ROM 10.2 inch",
-      quantity: 1,
-      ratings: "1,530",
-    },
-  ];
+  const [products, setProducts] = useState();
+  const { currentUser } = UserAuth();
+  const getProducts = async () => {
+    const q = collection(db, "products");
+    const querySnapshot = await getDocs(q);
+    const products = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    setProducts(products);
+
+    return products;
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const getCartItem = async () => {
+    let cartItemRef = await collection(db, "cart", `${currentUser.uid}/items`);
+    let querySnapshot = await getDocs(cartItemRef);
+    let products = querySnapshot.docs.map((doc) => ({
+      did: doc.id,
+      ...doc.data(),
+    }));
+    console.log(products.length);
+    localStorage.setItem("prLen", products.length);
+
+    return products;
+  };
+
+  const addToCart = async (product) => {
+    console.log(product);
+    try {
+      const { uid, displayName } = currentUser;
+      const cartData = {
+        brand: product.brand,
+        color: product.color,
+        href: product.href,
+        id: product.id,
+        imageAlt: product.imageAlt,
+        imageSrc: product.imageSrc,
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        ratings: product.ratings,
+        addedAt: serverTimestamp(),
+        addedById: uid,
+        addedByName: displayName,
+      };
+      console.log(cartData);
+
+      await addDoc(collection(db, "cart", `${uid}/items`), cartData);
+      getCartItem();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <Header />
       <div className="grid px-2 grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:mt-10">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div
             key={product.id}
             className="relative overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-500 rounded-xl group"
@@ -117,6 +147,9 @@ const Home = () => {
             </div>
             <div className="">
               <button
+                onClick={() => {
+                  addToCart(product);
+                }}
                 type="button"
                 className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-indigo-600"
               >
@@ -139,30 +172,6 @@ const Home = () => {
             </div>
           </div>
         ))}
-      </div>
-      {/* Small Screen View All */}
-      <div className="mt-12 text-center lg:hidden">
-        <a
-          href="#"
-          title=""
-          className="inline-flex items-center justify-center p-1 text-sm font-bold text-gray-600 transition-all duration-200 rounded-md focus:text-gray-900 focus:ring-gray-900 focus:ring-2 focus:ring-offset-2 focus:outline-none hover:text-gray-900"
-        >
-          View all
-          <svg
-            className="w-5 h-5 ml-2 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
-        </a>
       </div>
     </>
   );

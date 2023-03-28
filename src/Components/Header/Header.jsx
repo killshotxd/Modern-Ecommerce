@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UserAuth } from "../../Auth/AuthContext";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 const Header = () => {
   const { currentUser, logout } = UserAuth();
+  const [productLength, setProductLength] = useState();
   console.log(currentUser);
   const navigate = useNavigate();
 
@@ -11,12 +12,21 @@ const Header = () => {
     try {
       await logout();
       navigate("/");
+      localStorage.removeItem("prLen");
     } catch (error) {
       console.error();
     }
   };
 
-  let productLength = localStorage.getItem("ProductsLength");
+  const length = localStorage.getItem("prLen");
+
+  const productLengthF = async () => {
+    await setProductLength(length);
+  };
+  useEffect(() => {
+    productLengthF();
+  }, [setProductLength]);
+
   return (
     <>
       <div>
