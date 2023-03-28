@@ -1,6 +1,24 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { UserAuth } from "../../Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 export const SignIn = () => {
+  const navigate = useNavigate();
+  const { currentUser, signInGoogle } = UserAuth();
+
+  const handleLogin = async () => {
+    try {
+      await signInGoogle();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/home");
+    } else return;
+  }, [currentUser]);
+
   return (
     <section className="containerWrap" style={{ marginTop: "8rem" }}>
       <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -29,6 +47,7 @@ export const SignIn = () => {
 
             <div className="mt-3 space-y-3">
               <button
+                onClick={handleLogin}
                 type="button"
                 className="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 dark:text-gray-400 transition-all duration-200 bg-white border border-gray-500 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
               >
