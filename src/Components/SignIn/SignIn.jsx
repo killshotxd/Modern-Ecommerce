@@ -70,7 +70,7 @@ export const SignIn = () => {
         <div className="w-full h-full">
           <img
             className="w-full h-full mx-auto object-cover"
-            src="https://www.pexels.com/photo/shopping-bags-from-online-shopping-on-brown-wooden-table-with-laptop-6956922/"
+            src="https://cdn.shopify.com/shopifycloud/brochure/assets/landers/ppc/ecommerce/hero-small-accdfa5d4628cee00ae2a5c2694e164c1eec8b247143f59ad27dfdb232c8d819.png"
             alt=""
           />
         </div>
