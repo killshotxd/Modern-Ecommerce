@@ -12,6 +12,7 @@ const Header = () => {
     try {
       await logout();
       navigate("/");
+      localStorage.removeItem("prLen");
     } catch (error) {
       console.error();
     }
