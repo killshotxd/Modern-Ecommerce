@@ -8,14 +8,14 @@ import Account from "./Components/Account/Account";
 const App = () => {
   return (
     <>
-      {/* // <AuthProvider> */}
-      <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/account" element={<Account />} />
-      </Routes>
-      {/* </AuthProvider> */}
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/account" element={<Account />} />
+        </Routes>
+      </AuthProvider>
     </>
   );
 };
