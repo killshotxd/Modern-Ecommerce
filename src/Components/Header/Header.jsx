@@ -16,7 +16,7 @@ const Header = () => {
     }
   };
 
-  let productLength = localStorage.getItem("ProductsLength");
+  let productLength = localStorage.getItem("prLen");
   return (
     <>
       <div>

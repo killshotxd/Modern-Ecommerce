@@ -1,54 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
+import { db } from "../../Firebase";
+import {
+  QuerySnapshot,
+  collection,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
 
 const Home = () => {
-  const products = [
-    {
-      id: 1,
-      brand: "Apple",
-      name: "APPLE iPhone 13 (Midnight, 128 GB)",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/products/iphone-13-mlpf3hn-a-apple-original-imag6vzz5qvejz8z.jpeg?q=70",
-      href: "#",
-      price: "₹61,999",
-      color: "Midnight",
-      imageAlt: "APPLE iPhone 13 (Midnight, 128 GB)",
-      quantity: 1,
-      ratings: "12,873",
-    },
-    {
-      id: 2,
-      brand: "Apple",
-      name: "APPLE Airpods Pro Bluetooth Headset",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/products/mwp22hn-a-apple-original-imag3qe9eqkfhmg8.jpeg?q=70",
-      href: "#",
-      price: "₹22,500",
-      color: "White, True Wireless",
-      imageAlt: "APPLE Airpods Pro Bluetooth Headset",
-      quantity: 1,
-      ratings: "8,381",
-    },
-    {
-      id: 3,
-      brand: "Apple",
-      name: "APPLE iPad (9th Gen) 64 GB ROM 10.2 inch",
-      imageSrc:
-        "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/products/mk2k3hn-a-apple-original-imag6yy7xjjugz4w.jpeg?q=70",
-      href: "#",
-      price: "₹29,900",
-      color: "Space Grey",
-      imageAlt: "APPLE iPad (9th Gen) 64 GB ROM 10.2 inch",
-      quantity: 1,
-      ratings: "1,530",
-    },
-  ];
+  const [products, setProducts] = useState();
+
+  const getProducts = async () => {
+    const q = collection(db, "products");
+    const querySnapshot = await getDocs(q);
+    const products = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    setProducts(products);
+    localStorage.setItem("prLen", products.length);
+    return products;
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <>
       <Header />
       <div className="grid px-2 grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:mt-10">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div
             key={product.id}
             className="relative overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-500 rounded-xl group"
