@@ -10,6 +10,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.removeItem("ProductsLength");
       navigate("/");
     } catch (error) {
       console.error();
@@ -59,7 +60,7 @@ const Header = () => {
                 style={{ top: "1.3rem", position: "absolute", right: "5.4rem" }}
                 className="badge badge-sm "
               >
-                {productLength}
+                {productLength ? `${productLength}` : 0}
               </div>
             </span>
             <div className="dropdown dropdown-end">
