@@ -6,6 +6,7 @@ import Home from "./Components/Home/Home";
 import Cart from "./Components/Cart/Cart";
 import Account from "./Components/Account/Account";
 import { PrivateRoute } from "./Routes/PrivateRoute";
+import Admin from "./Components/Admin/Admin";
 const App = () => {
   return (
     <>
@@ -33,6 +34,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Account />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <Admin />
               </PrivateRoute>
             }
           />
