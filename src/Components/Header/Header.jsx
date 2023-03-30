@@ -7,7 +7,7 @@ import { db } from "../../Firebase";
 const Header = ({ products }) => {
   const { currentUser, logout } = UserAuth();
   const [productLength, setProductLength] = useState();
-  console.log(currentUser);
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
