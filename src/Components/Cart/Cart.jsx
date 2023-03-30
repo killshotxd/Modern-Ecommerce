@@ -74,6 +74,36 @@ const Cart = () => {
     }
   };
 
+  const decreaseQnt = async (product) => {
+    const did = product.did;
+    const { uid } = currentUser;
+    const cartItemRef = doc(db, "cart", `${uid}/items`, did);
+    if (product.quantity > 1) {
+      const data = {
+        quantity: product.quantity - 1,
+      };
+      try {
+        await updateDoc(cartItemRef, data);
+        toast("Item successfully removed");
+        getCartItem();
+      } catch (error) {
+        console.error("Error removing item from cart: ", error);
+      }
+    }
+    if ((product.quantity = 1)) {
+      const data = {
+        quantity: product.quantity,
+      };
+      try {
+        removeItem(product.did);
+
+        getCartItem();
+      } catch (error) {
+        console.error("Error removing item from cart: ", error);
+      }
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -110,13 +140,20 @@ const Cart = () => {
                         >
                           <BsPlus />
                         </button>
-                        <button className="btn btn-xs">
+                        <button
+                          onClick={() => {
+                            decreaseQnt(product);
+                          }}
+                          className="btn btn-xs"
+                        >
                           <BiMinus />
                         </button>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-semibold">{product.price}</p>
+                      <p className="text-lg font-semibold">
+                        ₹{product.price * product.quantity}
+                      </p>
                     </div>
                   </div>
                   <div className="flex text-sm divide-x">

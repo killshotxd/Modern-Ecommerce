@@ -156,7 +156,7 @@ const Home = () => {
                   </p>
                 </div>
                 <p className="mt-5 text-sm font-bold text-gray-900 dark:text-white">
-                  {product.price}
+                  ₹{product.price}
                 </p>
               </div>
             </div>
