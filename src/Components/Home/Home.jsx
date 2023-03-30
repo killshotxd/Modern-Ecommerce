@@ -24,10 +24,10 @@ const Home = () => {
     const q = collection(db, "products");
     const querySnapshot = await getDocs(q);
     const products = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
+      did: doc.id,
       ...doc.data(),
     }));
-
+    console.log(products);
     setProducts(products);
 
     return products;
@@ -53,6 +53,17 @@ const Home = () => {
   const addToCart = async (product) => {
     try {
       const { uid, displayName } = currentUser;
+
+      const cartRef = collection(db, "cart", `${uid}/items`);
+      const querySnapshot = await getDocs(cartRef);
+      const cartItems = querySnapshot.docs.map((doc) => doc.data());
+      // Check if item already exists in cart
+      const existingItem = cartItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        toast("Item already exists in cart!");
+        return;
+      }
+
       const cartData = {
         brand: product.brand,
         color: product.color,
@@ -145,7 +156,7 @@ const Home = () => {
                   </p>
                 </div>
                 <p className="mt-5 text-sm font-bold text-gray-900 dark:text-white">
-                  {product.price}
+                  ₹{product.price}
                 </p>
               </div>
             </div>

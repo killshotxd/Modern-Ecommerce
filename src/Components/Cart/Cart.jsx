@@ -11,10 +11,17 @@ import {
   onSnapshot,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { UserAuth } from "../../Auth/AuthContext";
+import { BsPlus } from "react-icons/bs";
+import { BiMinus } from "react-icons/bi";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Cart = () => {
   const [products, setProducts] = useState();
+  const [quantityItem, setQuantity] = useState(1);
   const { currentUser } = UserAuth();
 
   const getCartItem = async () => {
@@ -39,6 +46,7 @@ const Cart = () => {
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     try {
       await deleteDoc(cartItemRef);
+      toast("Item successfully removed from cart");
 
       getCartItem();
     } catch (error) {
@@ -50,8 +58,55 @@ const Cart = () => {
     getCartItem();
   }, []);
 
+  const increaseQnt = async (product) => {
+    const did = product.did;
+    const { uid } = currentUser;
+    const data = {
+      quantity: product.quantity + 1,
+    };
+    const cartItemRef = doc(db, "cart", `${uid}/items`, did);
+    try {
+      await updateDoc(cartItemRef, data);
+      toast("Item successfully added");
+      getCartItem();
+    } catch (error) {
+      console.error("Error removing item from cart: ", error);
+    }
+  };
+
+  const decreaseQnt = async (product) => {
+    const did = product.did;
+    const { uid } = currentUser;
+    const cartItemRef = doc(db, "cart", `${uid}/items`, did);
+    if (product.quantity > 1) {
+      const data = {
+        quantity: product.quantity - 1,
+      };
+      try {
+        await updateDoc(cartItemRef, data);
+        toast("Item successfully removed");
+        getCartItem();
+      } catch (error) {
+        console.error("Error removing item from cart: ", error);
+      }
+    }
+    if ((product.quantity = 1)) {
+      const data = {
+        quantity: product.quantity,
+      };
+      try {
+        removeItem(product.did);
+
+        getCartItem();
+      } catch (error) {
+        console.error("Error removing item from cart: ", error);
+      }
+    }
+  };
+
   return (
     <>
+      <ToastContainer />
       <Header products={products} />
       <div className="flex flex-col mx-auto max-w-3xl p-6 space-y-4 sm:p-10 dark:bg-gray-900 dark:text-gray-100">
         <h2 className="text-xl font-semibold">Your cart</h2>
@@ -71,14 +126,34 @@ const Cart = () => {
                   <div className="flex justify-between w-full pb-2 space-x-2">
                     <div className="space-y-1">
                       <h3 className="text-lg font-semibold leading-snug sm:pr-8">
-                        {product.name}
+                        {product.name} x {product.quantity}
                       </h3>
                       <p className="text-sm dark:text-gray-400">
                         {product.color}
                       </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            increaseQnt(product);
+                          }}
+                          className="btn btn-xs"
+                        >
+                          <BsPlus />
+                        </button>
+                        <button
+                          onClick={() => {
+                            decreaseQnt(product);
+                          }}
+                          className="btn btn-xs"
+                        >
+                          <BiMinus />
+                        </button>
+                      </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-semibold">{product.price}</p>
+                      <p className="text-lg font-semibold">
+                        ₹{product.price * product.quantity}
+                      </p>
                     </div>
                   </div>
                   <div className="flex text-sm divide-x">
