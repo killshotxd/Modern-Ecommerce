@@ -196,12 +196,12 @@ const Cart = () => {
             </li>
           ))}
         </ul>
-        <div className="space-y-1 text-right">
+        {/* <div className="space-y-1 text-right">
           <p>
             Total amount:
             <span className="font-semibold"> ₹48,967</span>
           </p>
-        </div>
+        </div> */}
         <div className="flex justify-end space-x-4">
           <button
             type="button"
