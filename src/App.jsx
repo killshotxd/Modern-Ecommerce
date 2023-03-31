@@ -7,7 +7,8 @@ import Cart from "./Components/Cart/Cart";
 import Account from "./Components/Account/Account";
 import { PrivateRoute } from "./Routes/PrivateRoute";
 import Admin from "./Components/Admin/Admin";
-import Checkout from "./Components/CheckOut/CheckOut";
+import Checkout from "./Components/CheckOut/Checkout";
+
 const App = () => {
   return (
     <>
