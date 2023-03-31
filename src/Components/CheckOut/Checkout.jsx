@@ -7,7 +7,8 @@ import { UserAuth } from "../../Auth/AuthContext";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-export const Checkout = () => {
+
+const Checkout = () => {
   const { state } = useLocation();
   const { products } = state || {};
   const [editProduct, setEditProduct] = useState();
