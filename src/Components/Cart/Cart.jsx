@@ -13,6 +13,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../../Auth/AuthContext";
 import { BsPlus } from "react-icons/bs";
 import { BiMinus } from "react-icons/bi";
@@ -53,6 +54,8 @@ const Cart = () => {
       console.error("Error removing item from cart: ", error);
     }
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCartItem();
@@ -208,6 +211,9 @@ const Cart = () => {
         </div> */}
         <div className="flex justify-end space-x-4">
           <button
+            onClick={() => {
+              navigate("/home");
+            }}
             type="button"
             className="px-6 py-2 border rounded-md dark:border-violet-400"
           >
@@ -215,6 +221,9 @@ const Cart = () => {
             <span className="sr-only sm:not-sr-only"> to shop</span>
           </button>
           <button
+            onClick={() => {
+              navigate("/checkout", { state: { products } });
+            }}
             type="button"
             className="px-6 py-2 border rounded-md dark:bg-violet-400 dark:text-gray-900 dark:border-violet-400"
           >
