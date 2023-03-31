@@ -8,6 +8,7 @@ import Account from "./Components/Account/Account";
 import { PrivateRoute } from "./Routes/PrivateRoute";
 import Admin from "./Components/Admin/Admin";
 import Checkout from "./Components/CheckOut/Checkout";
+import ProductInfo from "./Components/ProductInfo/ProductInfo";
 
 const App = () => {
   return (
@@ -52,6 +53,15 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Checkout />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/product"
+            element={
+              <PrivateRoute>
+                <ProductInfo />
               </PrivateRoute>
             }
           />
