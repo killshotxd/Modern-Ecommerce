@@ -61,8 +61,10 @@ const Cart = () => {
   const increaseQnt = async (product) => {
     const did = product.did;
     const { uid } = currentUser;
+    let newQnt = product.quantity + 1;
+    console.log(newQnt);
     const data = {
-      quantity: product.quantity + 1,
+      quantity: newQnt,
     };
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     try {
@@ -79,8 +81,10 @@ const Cart = () => {
     const { uid } = currentUser;
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     if (product.quantity > 1) {
+      let newQnt = product.quantity - 1;
+      console.log(newQnt);
       const data = {
-        quantity: product.quantity - 1,
+        quantity: newQnt,
       };
       try {
         await updateDoc(cartItemRef, data);
@@ -90,7 +94,7 @@ const Cart = () => {
         console.error("Error removing item from cart: ", error);
       }
     }
-    if ((product.quantity = 1)) {
+    if (product.quantity <= 1) {
       const data = {
         quantity: product.quantity,
       };
