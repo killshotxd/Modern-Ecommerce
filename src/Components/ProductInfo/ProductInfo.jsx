@@ -161,13 +161,7 @@ const ProductInfo = () => {
                   </span>
                 </div>
                 <p className="leading-relaxed dark:text-gray-300">
-                  iPhone 13. boasts an advanced dual-camera system that allows
-                  you to click mesmerising pictures with immaculate clarity.
-                  Furthermore, the lightning-fast A15 Bionic chip allows for
-                  seamless multitasking, elevating your performance to a new
-                  dimension. A big leap in battery life, a durable design, and a
-                  bright Super Retina XDR display facilitate boosting your user
-                  experience.
+                  {product.description}
                 </p>
                 <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                   <div className="flex">
