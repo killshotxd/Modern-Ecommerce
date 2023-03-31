@@ -14,12 +14,13 @@ import {
 import { UserAuth } from "../../Auth/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [products, setProducts] = useState();
   const [cartItemLength, setCartItemLength] = useState();
   const { currentUser } = UserAuth();
-
+  const navigate = useNavigate();
   const getProducts = async () => {
     const q = collection(db, "products");
     const querySnapshot = await getDocs(q);
@@ -132,10 +133,13 @@ const Home = () => {
                 <p className="text-xs font-medium tracking-widest text-gray-500 dark:text-gray-300 uppercase">
                   {product.brand}
                 </p>
-                <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-                  <a href="#" title="">
-                    {product.name}
-                  </a>
+                <h3
+                  onClick={() => {
+                    navigate("/product", { state: product });
+                  }}
+                  className="mt-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  <p>{product.name}</p>
                 </h3>
                 <div className="flex items-center mt-2.5">
                   <div className="flex items-center space-x-px">
