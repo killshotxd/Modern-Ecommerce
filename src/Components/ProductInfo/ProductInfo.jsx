@@ -42,6 +42,10 @@ const ProductInfo = () => {
   };
 
   const addToCart = async (product) => {
+    if (!currentUser) {
+      toast("Please Login First !");
+      return;
+    }
     try {
       const { uid, displayName } = currentUser;
 

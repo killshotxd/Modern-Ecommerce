@@ -52,9 +52,12 @@ const Home = () => {
   };
 
   const addToCart = async (product) => {
+    if (!currentUser) {
+      toast("Please Login First !");
+      return;
+    }
     try {
       const { uid, displayName } = currentUser;
-
       const cartRef = collection(db, "cart", `${uid}/items`);
       const querySnapshot = await getDocs(cartRef);
       const cartItems = querySnapshot.docs.map((doc) => doc.data());

@@ -16,11 +16,18 @@ import {
   startAt,
 } from "firebase/firestore";
 import { BsArrowRightCircleFill, BsArrowLeftCircleFill } from "react-icons/bs";
+import { UserAuth } from "../../Auth/AuthContext";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Admin = () => {
   const [products, setProducts] = useState();
+  const [productsLen, setProductsLen] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
+  const { currentUser } = UserAuth();
+  const { uid, displayName } = currentUser;
 
   const getProducts = async (pageNumber, pageSize) => {
     let q;
@@ -28,7 +35,6 @@ const Admin = () => {
     const startAtValue = (pageNumber - 1) * pageSize;
 
     q = await query(c, orderBy("id"), limit(pageSize), startAt(startAtValue));
-    // console.log(q);
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const products = [];
@@ -36,22 +42,20 @@ const Admin = () => {
         products.push({ ...doc.data(), did: doc.id });
       });
       setProducts(products);
-      // console.log(products);
 
       const totalProducts = querySnapshot.docs.length;
+      setProductsLen(totalProducts);
+
       const totalPages = Math.ceil(totalProducts / pageSize);
-      console.log(totalPages);
       setTotalPages(totalPages);
+
+      setValues((prevValues) => ({
+        ...prevValues,
+        id: products?.length + 1,
+      }));
     });
 
-    // setProducts(products);
-    // const totalProducts = q.size;
-    // const totalPages = Math.ceil(totalProducts / pageSize);
-    // console.log(totalPages);
     return { unsubscribe, totalPages };
-  };
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
   };
 
   useEffect(() => {
@@ -64,9 +68,80 @@ const Admin = () => {
     fetchData();
   }, [currentPage, pageSize]);
 
+  const [values, setValues] = useState({
+    name: "",
+    brand: "",
+    color: "",
+    description: "",
+    href: "#",
+    imageAlt: "",
+    imageSrc: "",
+    price: Number,
+    quantity: Number,
+    ratings: "",
+    category: "",
+    addedAt: serverTimestamp(),
+    addedById: uid,
+    addedByName: displayName,
+  });
+  console.log(values);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleInputChange = (event, property) => {
+    const value =
+      property === "price" || property === "quantity"
+        ? parseFloat(event.target.value)
+        : event.target.value;
+    setValues((prev) => ({
+      ...prev,
+      [property]: value,
+    }));
+  };
+
+  const handleCategoryChange = (event) => {
+    const category = event.target.value;
+    setValues((prev) => ({
+      ...prev,
+      category: category,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    console.log(values);
+
+    if (!currentUser) {
+      toast("Please Login First !");
+      return;
+    }
+    if (
+      values.brand == "" ||
+      values.name == "" ||
+      values.price == "" ||
+      values.imageSrc == "" ||
+      values.description == ""
+    ) {
+      toast("Enter correct details !");
+      return;
+    }
+    try {
+      const productCatRef = collection(db, "category", `${values.category}`);
+      const productAllRef = collection(db, "products");
+
+      await addDoc(productCatRef, values);
+      await addDoc(productAllRef, values);
+      toast("Item added to cart!");
+      getProducts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Header />
+      <ToastContainer />
       <div className="containerWrap">
         <section className="container px-4 mx-auto py-4">
           <div className="flex items-center justify-between">
@@ -236,48 +311,98 @@ const Admin = () => {
               <div>
                 <div className="form-control gap-3 w-full max-w-xs">
                   <label className="label font-semibold mb-0 pb-0">
-                    <span className="label-text">Brad Name:</span>
+                    <span className="label-text">Name:</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    className="input input-bordered input-md w-full max-w-xs"
+                    value={values.name}
+                    onChange={(event) => handleInputChange(event, "name")}
                   />
                 </div>
               </div>
               <div>
                 <div className="form-control gap-3  w-full max-w-xs">
                   <label className="label font-semibold mb-0 pb-0">
-                    <span className="label-text">Brad Color:</span>
+                    <span className="label-text">Brand Name:</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    className="input input-bordered input-md w-full max-w-xs"
+                    value={values.brand}
+                    onChange={(event) => handleInputChange(event, "brand")}
                   />
                 </div>
               </div>
               <div>
                 <div className="form-control gap-3 l w-full max-w-xs">
                   <label className="label font-semibold mb-0 pb-0">
-                    <span className="label-text">Link:</span>
+                    <span className="label-text">Color :</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    value={values.color}
+                    onChange={(event) => handleInputChange(event, "color")}
+                    className="input input-bordered input-md w-full max-w-xs"
                   />
                 </div>
               </div>
               <div>
-                <div className="form-control gap-3  w-full max-w-xs">
+                <div className="form-control gap-3 l w-full max-w-xs">
                   <label className="label font-semibold mb-0 pb-0">
-                    <span className="label-text">Image Art :</span>
+                    <span className="label-text">Description :</span>
+                  </label>
+                  <textarea
+                    type="text"
+                    placeholder="Type here"
+                    value={values.description}
+                    onChange={(event) =>
+                      handleInputChange(event, "description")
+                    }
+                    className="textarea textarea-accent"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="form-control gap-3 l w-full max-w-xs">
+                  <label className="label font-semibold mb-0 pb-0">
+                    <span className="label-text">Categories :</span>
+                  </label>
+                  <select
+                    className="select select-accent w-full max-w-xs"
+                    value={values.category} // Set selected value to category property in values state
+                    onChange={handleCategoryChange} // Add onChange event handler to update category property in values state
+                  >
+                    <option disabled value="">
+                      Pick One Category
+                    </option>
+                    <option value="Laptops/Desktops">Laptops/Desktops</option>
+                    <option value="Home">Home</option>
+                    <option value="Clothing/Fashion">Clothing/Fashion</option>
+                    <option value="Mobiles/Tablets">Mobiles/Tablets</option>
+                    <option value="Watches/SmartWatch">
+                      Watches/SmartWatch
+                    </option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Toys">Toys</option>
+                    <option value="Electronics">Electronics</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <div className="form-control gap-3 l w-full max-w-xs">
+                  <label className="label font-semibold mb-0 pb-0">
+                    <span className="label-text">Image Alt:</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    value={values.imageAlt}
+                    onChange={(event) => handleInputChange(event, "imageAlt")}
+                    className="input input-bordered input-md w-full max-w-xs"
                   />
                 </div>
               </div>
@@ -289,37 +414,65 @@ const Admin = () => {
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    value={values.imageSrc}
+                    onChange={(event) => handleInputChange(event, "imageSrc")}
+                    className="input input-bordered input-md w-full max-w-xs"
                   />
                 </div>
               </div>
               <div>
                 <div className="form-control gap-3  w-full max-w-xs">
                   <label className="label font-semibold mb-0 pb-0">
-                    <span className="label-text">Price:</span>
+                    <span className="label-text">Price :</span>
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    value={values.price}
+                    onChange={(event) => handleInputChange(event, "price")}
+                    className="input input-bordered input-md w-full max-w-xs"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="form-control gap-3  w-full max-w-xs">
+                  <label className="label font-semibold mb-0 pb-0">
+                    <span className="label-text">Quantity :</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={values.quantity}
+                    onChange={(event) => handleInputChange(event, "quantity")}
+                    placeholder="Type here"
+                    className="input input-bordered input-md w-full max-w-xs"
                   />
                 </div>
               </div>
               <div>
                 <div className="form-control gap-3 w-full max-w-xs">
                   <label className="label font-semibold mb-0 pb-0">
-                    <span className="label-text">Quantity:</span>
+                    <span className="label-text">Ratings :</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered input-md w-full max-w-xs"
+                    value={values.ratings}
+                    onChange={(event) => handleInputChange(event, "ratings")}
+                    className="input input-bordered input-md w-full max-w-xs"
                   />
                 </div>
               </div>
             </div>
             <div className="mt-3">
-              <button className="btn btn-active btn-primary">submit</button>
+              <button
+                htmlFor="my-modal-4"
+                onClick={() => {
+                  handleSubmit();
+                }}
+                className="btn btn-active btn-primary"
+              >
+                submit
+              </button>
             </div>
           </label>
         </label>

@@ -44,7 +44,7 @@ const Header = ({ products }) => {
           <a
             className="text-3xl font-bold leading-none flex items-center space-x-4"
             onClick={() => {
-              navigate("/home");
+              navigate("/");
             }}
           >
             <span>
@@ -69,6 +69,7 @@ const Header = ({ products }) => {
 
           <div className="flex items-center" style={{ gap: "2rem" }}>
             <span
+              style={{ position: "relative", top: "1rem" }}
               onClick={() => {
                 navigate("/cart");
               }}
@@ -76,33 +77,52 @@ const Header = ({ products }) => {
             >
               <RiShoppingCartLine size={20} />{" "}
               <div
-                style={{ top: "1.3rem", position: "absolute", right: "5.4rem" }}
+                style={{
+                  top: "-2.3rem",
+                  position: "relative",
+                  right: "-0.6rem",
+                }}
                 className="badge badge-sm "
               >
                 {productLength ? `${productLength}` : 0}
               </div>
             </span>
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} className="avatar cursor-pointer">
-                <div className="w-10 rounded-full">
-                  <img src={currentUser.photoURL} />
+            {currentUser ? (
+              <>
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} className="avatar cursor-pointer">
+                    <div className="w-10 rounded-full">
+                      <img src={currentUser.photoURL} />
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                  >
+                    <li>
+                      <p>{currentUser.displayName}</p>
+                    </li>
+                    <li>
+                      <a>Accounts</a>
+                    </li>
+                    <li>
+                      <p onClick={handleLogout}>Log Out</p>
+                    </li>
+                  </ul>
                 </div>
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <p>{currentUser.displayName}</p>
-                </li>
-                <li>
-                  <a>Accounts</a>
-                </li>
-                <li>
-                  <p onClick={handleLogout}>Log Out</p>
-                </li>
-              </ul>
-            </div>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    navigate("/signIn");
+                  }}
+                  className="btn"
+                >
+                  Sign In
+                </button>
+              </>
+            )}
           </div>
         </nav>
       </div>

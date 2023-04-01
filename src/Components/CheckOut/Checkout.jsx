@@ -7,6 +7,7 @@ import { UserAuth } from "../../Auth/AuthContext";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "../Header/Header";
 
 const Checkout = () => {
   const { state } = useLocation();
@@ -51,6 +52,7 @@ const Checkout = () => {
 
   return (
     <>
+      <Header />
       <ToastContainer />
       <div className="max-w-4xl mx-auto my-4 md:my-6">
         <div className="overflow-hidden  shadow rounded-xl">

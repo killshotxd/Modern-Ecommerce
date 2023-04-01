@@ -212,7 +212,7 @@ const Cart = () => {
         <div className="flex justify-end space-x-4">
           <button
             onClick={() => {
-              navigate("/home");
+              navigate("/");
             }}
             type="button"
             className="px-6 py-2 border rounded-md dark:border-violet-400"
