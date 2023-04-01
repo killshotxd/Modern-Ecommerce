@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
+import GooglePayButton from "@google-pay/button-react";
 
 const Checkout = () => {
   const { state } = useLocation();
@@ -159,6 +160,44 @@ const Checkout = () => {
 
             {/*  */}
             {/* Contact Info */}
+
+            {/* <GooglePayButton
+              environment="TEST"
+              paymentRequest={{
+                apiVersion: 2,
+                apiVersionMinor: 0,
+                allowedPaymentMethods: [
+                  {
+                    type: "CARD",
+                    parameters: {
+                      allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+                      allowedCardNetworks: ["MASTERCARD", "VISA"],
+                    },
+                    tokenizationSpecification: {
+                      type: "PAYMENT_GATEWAY",
+                      parameters: {
+                        gateway: "example",
+                        gatewayMerchantId: "exampleGatewayMerchantId",
+                      },
+                    },
+                  },
+                ],
+                merchantInfo: {
+                  merchantId: "12345678901234567890",
+                  merchantName: "Demo Merchant",
+                },
+                transactionInfo: {
+                  totalPriceStatus: "FINAL",
+                  totalPriceLabel: "Total",
+                  totalPrice: "100.00",
+                  currencyCode: "USD",
+                  countryCode: "US",
+                },
+              }}
+              onLoadPaymentData={(paymentRequest) => {
+                console.log("load payment data", paymentRequest);
+              }}
+            /> */}
             <div className="px-5 py-6 md:px-8 dark:bg-gray-900 dark:text-gray-300 text-gray-900">
               <div className="flow-root">
                 <div className="-my-6 divide-y divide-gray-200">
