@@ -15,15 +15,8 @@ const App = () => {
     <>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route
-            path="/home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/signIn" element={<SignIn />} />
           <Route
             path="/cart"
             element={
@@ -57,14 +50,7 @@ const App = () => {
             }
           />
 
-          <Route
-            path="/product"
-            element={
-              <PrivateRoute>
-                <ProductInfo />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/product" element={<ProductInfo />} />
         </Routes>
       </AuthProvider>
     </>

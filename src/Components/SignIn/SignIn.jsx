@@ -15,7 +15,7 @@ export const SignIn = () => {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/home");
+      navigate("/");
     } else return;
   }, [currentUser]);
 
