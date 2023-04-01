@@ -78,7 +78,7 @@ const Admin = () => {
     imageSrc: "",
     price: Number,
     quantity: Number,
-    ratings: "",
+    ratings: Number,
     category: "",
     addedAt: serverTimestamp(),
     addedById: uid,
@@ -91,7 +91,7 @@ const Admin = () => {
 
   const handleInputChange = (event, property) => {
     const value =
-      property === "price" || property === "quantity"
+      property === "price" || property === "quantity" || property === "ratings"
         ? parseFloat(event.target.value)
         : event.target.value;
     setValues((prev) => ({
