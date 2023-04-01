@@ -18,7 +18,6 @@ const Checkout = () => {
   }, []);
 
   const { currentUser } = UserAuth();
-  console.log(products);
 
   const getCartItem = async () => {
     const { uid } = currentUser;
@@ -37,8 +36,6 @@ const Checkout = () => {
   };
 
   const removeItem = async (did) => {
-    console.log("clicked");
-    console.log(did);
     const { uid } = currentUser;
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     try {
@@ -49,6 +46,10 @@ const Checkout = () => {
       console.error("Error removing item from cart: ", error);
     }
   };
+
+  const totalAmount = editProduct?.reduce((accumulator, product) => {
+    return accumulator + product.price * product.quantity;
+  }, 0);
 
   return (
     <>
@@ -149,7 +150,9 @@ const Checkout = () => {
 
                 <li className="flex items-center justify-between text-gray-900 dark:text-black">
                   <p className="text-sm font-medium ">Total</p>
-                  <p className="text-sm font-bold ">₹1,14,399</p>
+                  <p className="text-sm font-bold ">
+                    {" ₹" + totalAmount?.toLocaleString("en-IN")}
+                  </p>
                 </li>
               </ul>
             </div>

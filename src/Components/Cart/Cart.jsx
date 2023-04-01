@@ -58,7 +58,7 @@ const Cart = () => {
 
   useEffect(() => {
     getCartItem();
-  }, []);
+  }, [quantityItem]);
 
   const increaseQnt = async (product) => {
     const did = product.did;
