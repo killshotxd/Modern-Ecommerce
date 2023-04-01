@@ -28,7 +28,7 @@ const Home = () => {
       did: doc.id,
       ...doc.data(),
     }));
-    console.log(products);
+
     setProducts(products);
 
     return products;
@@ -163,7 +163,7 @@ const Home = () => {
                   </p>
                 </div>
                 <p className="mt-5 text-sm font-bold text-gray-900 dark:text-white">
-                  ₹{product.price}
+                  {" ₹" + product.price.toLocaleString("en-IN")}
                 </p>
               </div>
             </div>

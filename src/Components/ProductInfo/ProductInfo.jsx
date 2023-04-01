@@ -201,7 +201,7 @@ const ProductInfo = () => {
                 </div>
                 <div className="flex">
                   <span className="title-font font-medium text-2xl text-gray-900 dark:text-white">
-                    ₹ {product.price}
+                    {" ₹" + product.price.toLocaleString("en-IN")}
                   </span>
                   <button
                     onClick={() => {

@@ -42,7 +42,6 @@ const Cart = () => {
   };
 
   const removeItem = async (did) => {
-    console.log(did);
     const { uid } = currentUser;
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     try {
@@ -65,7 +64,7 @@ const Cart = () => {
     const did = product.did;
     const { uid } = currentUser;
     let newQnt = product.quantity + 1;
-    console.log(newQnt);
+
     const data = {
       quantity: newQnt,
     };
@@ -85,7 +84,7 @@ const Cart = () => {
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
     if (product.quantity > 1) {
       let newQnt = product.quantity - 1;
-      console.log(newQnt);
+
       const data = {
         quantity: newQnt,
       };
@@ -110,6 +109,10 @@ const Cart = () => {
       }
     }
   };
+
+  const totalAmount = products?.reduce((accumulator, product) => {
+    return accumulator + product.price * product.quantity;
+  }, 0);
 
   return (
     <>
@@ -159,7 +162,10 @@ const Cart = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-semibold">
-                        ₹{product.price * product.quantity}
+                        {" ₹" +
+                          (product.price * product.quantity).toLocaleString(
+                            "en-IN"
+                          )}
                       </p>
                     </div>
                   </div>
@@ -203,12 +209,15 @@ const Cart = () => {
             </li>
           ))}
         </ul>
-        {/* <div className="space-y-1 text-right">
+        <div className="space-y-1 text-right">
           <p>
             Total amount:
-            <span className="font-semibold"> ₹48,967</span>
+            <span className="font-semibold">
+              {" "}
+              {" ₹" + totalAmount?.toLocaleString("en-IN")}
+            </span>
           </p>
-        </div> */}
+        </div>
         <div className="flex justify-end space-x-4">
           <button
             onClick={() => {
