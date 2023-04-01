@@ -159,7 +159,7 @@ const Home = () => {
                     ))}
                   </div>
                   <p className="text-sm font-medium text-gray-500 ml-1.5 dark:text-gray-300">
-                    ({product.ratings})
+                    ({product.ratings?.toLocaleString("en-IN")})
                   </p>
                 </div>
                 <p className="mt-5 text-sm font-bold text-gray-900 dark:text-white">
