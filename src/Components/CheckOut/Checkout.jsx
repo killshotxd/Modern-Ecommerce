@@ -1,4 +1,12 @@
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  writeBatch,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -8,17 +16,30 @@ import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
-import GooglePayButton from "@google-pay/button-react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const Checkout = () => {
   const { state } = useLocation();
   const { products } = state || {};
   const [editProduct, setEditProduct] = useState();
+  const navigate = useNavigate();
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+  });
+  console.log(values);
   useEffect(() => {
     setEditProduct(products);
   }, []);
 
   const { currentUser } = UserAuth();
+  const handleInputChange = (event, property) => {
+    setValues((prev) => ({
+      ...prev,
+      [property]: event.target.value,
+    }));
+  };
 
   const getCartItem = async () => {
     const { uid } = currentUser;
@@ -36,6 +57,26 @@ const Checkout = () => {
     return products;
   };
 
+  const removeCart = async () => {
+    const { uid } = currentUser;
+    const cartItemRef = await doc(db, "cart", `${uid}`);
+
+    try {
+      const cartItemDoc = await getDoc(cartItemRef);
+      const productsRef = collection(cartItemDoc.ref, "items");
+      const productQuerySnapshot = await getDocs(productsRef);
+
+      const batch = writeBatch(db);
+      productQuerySnapshot.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
+
+      getCartItem();
+      navigate("/");
+    } catch (error) {
+      console.error("Error removing cart products: ", error);
+    }
+  };
+
   const removeItem = async (did) => {
     const { uid } = currentUser;
     const cartItemRef = doc(db, "cart", `${uid}/items`, did);
@@ -51,6 +92,66 @@ const Checkout = () => {
   const totalAmount = editProduct?.reduce((accumulator, product) => {
     return accumulator + product.price * product.quantity;
   }, 0);
+
+  const invoiceGen = async (event) => {
+    event.preventDefault();
+    const doc = new jsPDF();
+    const name = values.name;
+    const email = values.email;
+
+    // Add header
+    doc.setFontSize(18);
+    doc.text("Invoice", 15, 15);
+    doc.text(`Name: ${name}`, 15, 25); // add name to the header
+    doc.text(`Email: ${email}`, 15, 35);
+
+    // Add product list
+    let startY = 30;
+    const products = editProduct || [];
+    const headers = ["Product", "Color", "Quantity", "Price", "Total"];
+    const data = products.map((product) => {
+      return [
+        product.name,
+        product.color,
+        product.quantity,
+        product.price.toLocaleString("en-IN") + "Rs",
+        (product.price * product.quantity).toLocaleString("en-IN") + "Rs",
+      ];
+    });
+    doc.autoTable({
+      startY: startY,
+      head: [headers],
+      body: data,
+    });
+
+    // Add subtotal and total
+    const total = totalAmount?.toLocaleString("en-IN");
+    const subTotal = products.reduce(
+      (acc, curr) => acc + curr.price * curr.quantity,
+      0
+    );
+    doc.text(
+      `Subtotal: ${subTotal.toLocaleString("en-IN")}Rs`,
+      15,
+      startY + data.length * 10 + 10
+    );
+    doc.text(`Total: ${total}Rs`, 15, startY + data.length * 10 + 20);
+
+    if (name == "" || email == "") {
+      toast("Please enter valid details !");
+      return;
+    }
+    // Save PDF
+    doc.save(`${Math.floor(Math.random() * 100)}invoice.pdf`);
+    toast("Order Successful !");
+    // navigate("/");
+    removeCart();
+    getCartItem();
+
+    // SEND PDF using sendinblue
+
+    // Create a Sendinblue API client
+  };
 
   return (
     <>
@@ -93,7 +194,10 @@ const Checkout = () => {
 
                       <div className="flex flex-col items-end justify-between ml-auto">
                         <p className="text-sm font-bold text-right text-gray-900 dark:text-black">
-                          ₹ {product.price}
+                          {" ₹" +
+                            (product.price * product.quantity).toLocaleString(
+                              "en-IN"
+                            )}
                         </p>
 
                         <button
@@ -161,43 +265,6 @@ const Checkout = () => {
             {/*  */}
             {/* Contact Info */}
 
-            {/* <GooglePayButton
-              environment="TEST"
-              paymentRequest={{
-                apiVersion: 2,
-                apiVersionMinor: 0,
-                allowedPaymentMethods: [
-                  {
-                    type: "CARD",
-                    parameters: {
-                      allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-                      allowedCardNetworks: ["MASTERCARD", "VISA"],
-                    },
-                    tokenizationSpecification: {
-                      type: "PAYMENT_GATEWAY",
-                      parameters: {
-                        gateway: "example",
-                        gatewayMerchantId: "exampleGatewayMerchantId",
-                      },
-                    },
-                  },
-                ],
-                merchantInfo: {
-                  merchantId: "12345678901234567890",
-                  merchantName: "Demo Merchant",
-                },
-                transactionInfo: {
-                  totalPriceStatus: "FINAL",
-                  totalPriceLabel: "Total",
-                  totalPrice: "100.00",
-                  currencyCode: "USD",
-                  countryCode: "US",
-                },
-              }}
-              onLoadPaymentData={(paymentRequest) => {
-                console.log("load payment data", paymentRequest);
-              }}
-            /> */}
             <div className="px-5 py-6 md:px-8 dark:bg-gray-900 dark:text-gray-300 text-gray-900">
               <div className="flow-root">
                 <div className="-my-6 divide-y divide-gray-200">
@@ -220,6 +287,10 @@ const Checkout = () => {
                             type="text"
                             id="name"
                             placeholder="First & Last Name"
+                            value={values.name}
+                            onChange={(event) =>
+                              handleInputChange(event, "name")
+                            }
                           />
                         </div>
 
@@ -235,11 +306,18 @@ const Checkout = () => {
                             type="email"
                             id="email"
                             placeholder="Email"
+                            value={values.email}
+                            onChange={(event) =>
+                              handleInputChange(event, "email")
+                            }
                           />
                         </div>
                         <div>
-                          <button className="rounded-md w-full bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500">
-                            Get started
+                          <button
+                            onClick={invoiceGen}
+                            className="rounded-md w-full bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
+                          >
+                            Pay
                           </button>
                         </div>
                       </div>

@@ -84,7 +84,7 @@ const Admin = () => {
     addedById: uid,
     addedByName: displayName,
   });
-  console.log(values);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
