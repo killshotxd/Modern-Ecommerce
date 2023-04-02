@@ -97,7 +97,38 @@ const Home = () => {
     <>
       <ToastContainer />
       <Header products={cartItemLength} />
+      <div class="flex pl-4 pr-4 md:text-left text-center md:justify-between justify-center items-center">
+        <div>
+          <h2 class="text-3xl md:flex hidden font-medium">
+            Popular Categories
+          </h2>
+          <div class="mt-2 md:flex hidden">Choose from variety of items</div>
+        </div>
+        <div
+          onClick={() => {
+            navigate("/category");
+          }}
+          class=" max-w-sm flex cursor-pointer items-center uppercase text-gray-500"
+        >
+          All Categories
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="ml-1 w-4 h-4"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            ></path>
+          </svg>
+        </div>
+      </div>
       <div style={{ minHeight: "70vh" }}>
+        {/* ALL */}
         <div className="grid  px-2 grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:mt-10">
           {products?.map((product) => (
             <div
