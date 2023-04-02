@@ -93,6 +93,19 @@ const Checkout = () => {
     return accumulator + product.price * product.quantity;
   }, 0);
 
+  const saveInvoiceToDb = async (invoice) => {
+    const { uid } = currentUser;
+    const userRef = doc(db, "users", uid);
+
+    try {
+      await updateDoc(userRef, {
+        invoice: invoice,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const invoiceGen = async (event) => {
     event.preventDefault();
     const doc = new jsPDF();
@@ -101,21 +114,33 @@ const Checkout = () => {
 
     // Add header
     doc.setFontSize(18);
-    doc.text("Invoice", 15, 15);
-    doc.text(`Name: ${name}`, 15, 25); // add name to the header
-    doc.text(`Email: ${email}`, 15, 35);
+    doc.text("Modern E-Commerce", 15, 10);
+    doc.text(`Invoice No.: #${Math.floor(Math.random() * 1000)}`, 15, 20);
+    doc.text(`Name: ${name}`, 15, 30);
+    doc.text(`Email: ${email}`, 15, 40);
 
     // Add product list
-    let startY = 30;
+    let startY = 50;
     const products = editProduct || [];
-    const headers = ["Product", "Color", "Quantity", "Price", "Total"];
+    const headers = [
+      "Product",
+      "Color",
+      "Quantity",
+      "Price",
+      "Tax(6%)",
+      "Total",
+    ];
     const data = products.map((product) => {
+      const price = product.price * product.quantity;
+      const tax = price * 0.06;
+      const total = price + tax;
       return [
         product.name,
         product.color,
         product.quantity,
-        product.price.toLocaleString("en-IN") + "Rs",
-        (product.price * product.quantity).toLocaleString("en-IN") + "Rs",
+        price.toLocaleString("en-IN") + "Rs",
+        tax.toLocaleString("en-IN") + "Rs",
+        total.toLocaleString("en-IN") + "Rs",
       ];
     });
     doc.autoTable({
@@ -125,32 +150,44 @@ const Checkout = () => {
     });
 
     // Add subtotal and total
-    const total = totalAmount?.toLocaleString("en-IN");
-    const subTotal = products.reduce(
+    const totalWithoutTax = products.reduce(
       (acc, curr) => acc + curr.price * curr.quantity,
       0
     );
+    const tax = totalWithoutTax * 0.06;
+    const total = totalWithoutTax + tax;
     doc.text(
-      `Subtotal: ${subTotal.toLocaleString("en-IN")}Rs`,
-      15,
-      startY + data.length * 10 + 10
+      `Subtotal: ${totalWithoutTax.toLocaleString("en-IN")}Rs`,
+      130,
+      startY + data.length * 10 + 20
     );
-    doc.text(`Total: ${total}Rs`, 15, startY + data.length * 10 + 20);
+    doc.text(
+      `Tax: ${tax.toLocaleString("en-IN")}Rs`,
+      130,
+      startY + data.length * 10 + 30
+    );
+    doc.text(
+      `Total: ${total.toLocaleString("en-IN")}Rs`,
+      130,
+      startY + data.length * 10 + 40
+    );
 
     if (name == "" || email == "") {
       toast("Please enter valid details !");
       return;
     }
-    // Save PDF
+
+    // Save PDF to user's database
+    const base64String = doc.output("datauristring");
+    await saveInvoiceToDb(base64String);
+
+    // Save PDF to local file system
     doc.save(`${Math.floor(Math.random() * 100)}invoice.pdf`);
+
     toast("Order Successful !");
     // navigate("/");
     removeCart();
     getCartItem();
-
-    // SEND PDF using sendinblue
-
-    // Create a Sendinblue API client
   };
 
   return (
