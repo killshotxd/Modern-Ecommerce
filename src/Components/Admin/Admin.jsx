@@ -126,7 +126,7 @@ const Admin = () => {
       return;
     }
     try {
-      const productCatRef = collection(db, "category", `${values.category}`);
+      const productCatRef = collection(db, `category/${values.category}/item`);
       const productAllRef = collection(db, "products");
 
       await addDoc(productCatRef, values);
@@ -379,13 +379,11 @@ const Admin = () => {
                     <option disabled value="">
                       Pick One Category
                     </option>
-                    <option value="Laptops/Desktops">Laptops/Desktops</option>
+                    <option value="PC">Laptops/Desktops</option>
                     <option value="Home">Home</option>
-                    <option value="Clothing/Fashion">Clothing/Fashion</option>
-                    <option value="Mobiles/Tablets">Mobiles/Tablets</option>
-                    <option value="Watches/SmartWatch">
-                      Watches/SmartWatch
-                    </option>
+                    <option value="Clothing">Clothing/Fashion</option>
+                    <option value="Mobiles">Mobiles/Tablets</option>
+                    <option value="Watches">Watches/SmartWatch</option>
                     <option value="Beauty">Beauty</option>
                     <option value="Toys">Toys</option>
                     <option value="Electronics">Electronics</option>

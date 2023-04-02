@@ -9,6 +9,7 @@ const Admin = lazy(() => import("./Components/Admin/Admin"));
 const Checkout = lazy(() => import("./Components/CheckOut/Checkout"));
 const ProductInfo = lazy(() => import("./Components/ProductInfo/ProductInfo"));
 import { PrivateRoute } from "./Routes/PrivateRoute";
+import Categories from "./Components/Categories/Categories";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         >
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/category" element={<Categories />} />
             <Route path="/signIn" element={<SignIn />} />
             <Route
               path="/cart"
