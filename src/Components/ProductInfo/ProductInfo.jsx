@@ -53,7 +53,9 @@ const ProductInfo = () => {
       const querySnapshot = await getDocs(cartRef);
       const cartItems = querySnapshot.docs.map((doc) => doc.data());
       // Check if item already exists in cart
-      const existingItem = cartItems.find((item) => item.id === product.id);
+      const existingItem = cartItems.find(
+        (item) => item.id === product.id && item.name === product.name
+      );
       if (existingItem) {
         toast("Item already exists in cart!");
         return;
