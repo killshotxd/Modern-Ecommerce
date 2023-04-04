@@ -240,7 +240,7 @@ const Admin = () => {
                             {/* <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                               Active
                             </span> */}
-                            ₹{person.price}
+                            {" ₹" + person.price.toLocaleString("en-IN")}
                           </td>
                           {/* <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                             {person.role}
@@ -379,14 +379,15 @@ const Admin = () => {
                     <option disabled value="">
                       Pick One Category
                     </option>
-                    <option value="PC">Laptops/Desktops</option>
+
                     <option value="Home">Home</option>
-                    <option value="Clothing">Clothing/Fashion</option>
+                    <option value="Fashion">Clothing/Fashion</option>
                     <option value="Mobiles">Mobiles/Tablets</option>
-                    <option value="Watches">Watches/SmartWatch</option>
-                    <option value="Beauty">Beauty</option>
-                    <option value="Toys">Toys</option>
+
+                    <option value="Beauty, Toys & More">Beauty</option>
+
                     <option value="Electronics">Electronics</option>
+                    <option value="Appliances">Appliances</option>
                   </select>
                 </div>
               </div>
