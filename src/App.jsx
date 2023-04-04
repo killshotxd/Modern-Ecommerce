@@ -10,6 +10,7 @@ const Checkout = lazy(() => import("./Components/CheckOut/Checkout"));
 const ProductInfo = lazy(() => import("./Components/ProductInfo/ProductInfo"));
 import { PrivateRoute } from "./Routes/PrivateRoute";
 import Categories from "./Components/Categories/Categories";
+import Category from "./Components/Categories/Category";
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
         >
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/category" element={<Categories />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/category/:name" element={<Category />} />
             <Route path="/signIn" element={<SignIn />} />
             <Route
               path="/cart"

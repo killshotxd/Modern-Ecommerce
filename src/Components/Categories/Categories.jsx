@@ -1,5 +1,7 @@
 import React from "react";
 import Header from "../Header/Header";
+import { useNavigate } from "react-router-dom";
+
 const categories = [
   {
     title: "Mobiles",
@@ -31,12 +33,7 @@ const categories = [
     image:
       "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/category/0ff199d1bd27eb98.png",
   },
-  {
-    title: "Travel",
-    href: "",
-    image:
-      "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/category/71050627a56b4693.png",
-  },
+
   {
     title: "Beauty, Toys & More",
     href: "",
@@ -45,6 +42,7 @@ const categories = [
   },
 ];
 const Categories = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Header />
@@ -78,7 +76,9 @@ const Categories = () => {
               <a
                 className="bg-gray-100 dark:bg-gray-800 rounded-xl flex flex-col justify-center items-center p-4 md:p-6"
                 key={category.title}
-                href={category.href}
+                onClick={() => {
+                  navigate(`/category/${category.title}`);
+                }}
               >
                 <img
                   className="h-20 w-20"

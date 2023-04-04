@@ -5,7 +5,7 @@ import { AiFillInstagram } from "react-icons/ai";
 const Footer = () => {
   return (
     <div className="footer mt-2  p-10 bg-neutral text-neutral-content">
-      <footer className="containerWrap flex justify-between">
+      <footer className=" w-full flex justify-between">
         <div>
           <svg
             width="50"

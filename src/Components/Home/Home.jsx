@@ -99,14 +99,12 @@ const Home = () => {
       <Header products={cartItemLength} />
       <div class="flex pl-4 pr-4 md:text-left text-center md:justify-between justify-center items-center">
         <div>
-          <h2 class="text-3xl md:flex hidden font-medium">
-            Popular Categories
-          </h2>
+          <h2 class="text-3xl md:flex hidden font-medium">ALL Categories</h2>
           <div class="mt-2 md:flex hidden">Choose from variety of items</div>
         </div>
         <div
           onClick={() => {
-            navigate("/category");
+            navigate("/categories");
           }}
           class=" max-w-sm flex cursor-pointer items-center uppercase text-gray-500"
         >
@@ -132,7 +130,7 @@ const Home = () => {
         <div className="grid  px-2 grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:mt-10">
           {products?.map((product) => (
             <div
-              key={product.id}
+              key={product.name}
               className="relative overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-500 rounded-xl group"
             >
               <div className="absolute z-10 top-3 right-3">

@@ -203,7 +203,7 @@ const Checkout = () => {
                 <ul className="divide-y divide-gray-200 -my-7">
                   {editProduct?.map((product) => (
                     <li
-                      key={product.id}
+                      key={product.name}
                       className="flex items-stretch justify-between space-x-5 py-7"
                     >
                       <div className="flex items-stretch flex-1">

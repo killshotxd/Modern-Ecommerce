@@ -123,7 +123,7 @@ const Cart = () => {
         <ul className="flex flex-col divide-y divide-gray-700">
           {products?.map((product) => (
             <li
-              key={product.id}
+              key={product.name}
               className="flex flex-col py-6 sm:flex-row sm:justify-between"
             >
               <div className="flex w-full space-x-2 sm:space-x-4">
