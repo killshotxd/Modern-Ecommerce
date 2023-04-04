@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../Firebase";
 import {
   QuerySnapshot,
@@ -19,6 +19,8 @@ import "react-toastify/dist/ReactToastify.css";
 const Category = () => {
   const { name } = useParams();
   const [products, setProducts] = useState();
+  const navigate = useNavigate();
+
   const getProducts = async () => {
     const q = collection(db, `category/${name}/item`);
     const querySnapshot = await getDocs(q);
@@ -68,7 +70,9 @@ const Category = () => {
               <div key={product.name} className="lg:w-1/4 sm:w-1/2 p-4 w-full">
                 <a
                   className="block relative h-48 rounded overflow-hidden"
-                  href=""
+                  onClick={() => {
+                    navigate("/product", { state: product });
+                  }}
                 >
                   <img
                     alt={product.name}
@@ -83,7 +87,10 @@ const Category = () => {
                   <h2 className="text-gray-900 title-font text-lg font-medium dark:text-white">
                     {product.name}
                   </h2>
-                  <p className="mt-1 dark:text-gray-300">{product.price}</p>
+                  <p className="mt-1 dark:text-gray-300">
+                    {" "}
+                    {" ₹" + product.price.toLocaleString("en-IN")}
+                  </p>
                 </div>
               </div>
             ))}
