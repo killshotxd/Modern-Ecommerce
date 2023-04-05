@@ -97,16 +97,16 @@ const Home = () => {
     <>
       <ToastContainer />
       <Header products={cartItemLength} />
-      <div class="flex pl-4 pr-4 md:text-left text-center md:justify-between justify-center items-center">
-        <div>
+      <div class="flex pl-4 pr-4  text-center justify-center items-center">
+        {/* <div>
           <h2 class="text-3xl md:flex hidden font-medium">ALL Categories</h2>
           <div class="mt-2 md:flex hidden">Choose from variety of items</div>
-        </div>
+        </div> */}
         <div
           onClick={() => {
             navigate("/categories");
           }}
-          class=" max-w-sm flex cursor-pointer items-center uppercase text-gray-500"
+          class="  max-w-full font-bold text-center flex cursor-pointer items-center uppercase text-gray-500"
         >
           All Categories
           <svg

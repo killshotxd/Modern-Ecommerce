@@ -46,7 +46,12 @@ const Category = () => {
             <h2 className="text-3xl font-medium">{name}</h2>
             <div className="mt-2">Choose from variety of items</div>
           </div>
-          <div className="md:flex hidden items-center uppercase text-gray-500">
+          <div
+            onClick={() => {
+              navigate("/categories");
+            }}
+            className="md:flex hidden items-center uppercase cursor-pointer text-gray-500"
+          >
             All Categories
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -94,6 +99,18 @@ const Category = () => {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => {
+                navigate("/categories");
+              }}
+              type="button"
+              className="px-6 py-2 border rounded-md dark:border-violet-400"
+            >
+              Back
+              <span className="sr-only sm:not-sr-only"> to categories</span>
+            </button>
           </div>
         </div>
       </section>
