@@ -1,7 +1,12 @@
 import React from "react";
+import Header from "../Header/Header";
 
 const Account = () => {
-  return <div>Account</div>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
 export default Account;

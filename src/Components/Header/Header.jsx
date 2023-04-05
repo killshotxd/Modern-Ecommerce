@@ -102,7 +102,11 @@ const Header = ({ products }) => {
                     <li>
                       <p>{currentUser.displayName}</p>
                     </li>
-                    <li>
+                    <li
+                      onClick={() => {
+                        navigate("/account");
+                      }}
+                    >
                       <a>Accounts</a>
                     </li>
                     <li>
