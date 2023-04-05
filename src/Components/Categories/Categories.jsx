@@ -52,23 +52,6 @@ const Categories = () => {
             <h2 className="text-3xl font-medium">Popular Categories</h2>
             <div className="mt-2">Choose from variety of items</div>
           </div>
-          <div className="md:flex hidden items-center uppercase text-gray-500">
-            All Categories
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="ml-1 w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
         </div>
         <div className="my-10">
           <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
@@ -109,6 +92,18 @@ const Categories = () => {
               d="M8.25 4.5l7.5 7.5-7.5 7.5"
             />
           </svg>
+        </div>
+        <div className="flex justify-end space-x-4">
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            type="button"
+            className="px-6 py-2 border rounded-md dark:border-violet-400"
+          >
+            Back
+            <span className="sr-only sm:not-sr-only"> to shop</span>
+          </button>
         </div>
       </div>
     </>
