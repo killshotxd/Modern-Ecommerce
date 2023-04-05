@@ -10,6 +10,12 @@ const categories = [
       "https://dev-ui-image-assets.s3.ap-south-1.amazonaws.com/category/22fddf3c7da4c4f4.png",
   },
   {
+    title: "Watches",
+    href: "",
+    image:
+      "https://staticimg.titan.co.in/Helios/Catalog/TH1791537_1.jpg?impolicy=pqmed&imwidth=640",
+  },
+  {
     title: "Fashion",
     href: "",
     image:

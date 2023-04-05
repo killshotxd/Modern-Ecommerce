@@ -1,4 +1,5 @@
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -96,10 +97,16 @@ const Checkout = () => {
   const saveInvoiceToDb = async (invoice) => {
     const { uid } = currentUser;
     const userRef = doc(db, "users", uid);
+    const invoicesRef = collection(userRef, "invoices");
 
     try {
-      await updateDoc(userRef, {
-        invoice: invoice,
+      // Generate a unique filename for the invoice
+      const filename = `invoice_${Date.now()}.pdf`;
+
+      // Save the invoice as a base64 string in Firestore
+      await addDoc(invoicesRef, {
+        filename,
+        invoice,
       });
     } catch (error) {
       console.log(error);
@@ -126,23 +133,27 @@ const Checkout = () => {
       "Product",
       "Color",
       "Quantity",
+      "Category",
       "Price",
       "Tax(6%)",
       "Total",
     ];
     const data = products.map((product) => {
+      console.log(product);
       const price = product.price * product.quantity;
       const tax = price * 0.06;
       const total = price + tax;
       return [
         product.name,
         product.color,
+        product.category,
         product.quantity,
         price.toLocaleString("en-IN") + "Rs",
         tax.toLocaleString("en-IN") + "Rs",
         total.toLocaleString("en-IN") + "Rs",
       ];
     });
+    console.log(data);
     doc.autoTable({
       startY: startY,
       head: [headers],
@@ -185,7 +196,7 @@ const Checkout = () => {
     doc.save(`${Math.floor(Math.random() * 100)}invoice.pdf`);
 
     toast("Order Successful !");
-    // navigate("/");
+    navigate("/");
     removeCart();
     getCartItem();
   };

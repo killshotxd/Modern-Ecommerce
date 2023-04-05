@@ -90,7 +90,7 @@ const Header = ({ products }) => {
             {currentUser ? (
               <>
                 <div className="dropdown dropdown-end">
-                  <div tabIndex={0} className="avatar cursor-pointer">
+                  <div tabIndex={0} className="avatar online cursor-pointer">
                     <div className="w-10 rounded-full">
                       <img src={currentUser.photoURL} />
                     </div>
