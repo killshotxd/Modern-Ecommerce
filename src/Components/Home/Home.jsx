@@ -5,6 +5,7 @@ import {
   QuerySnapshot,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
@@ -19,6 +20,7 @@ import Footer from "../Footer/Footer";
 
 const Home = () => {
   const [products, setProducts] = useState();
+  const [favorites, setFavorites] = useState();
   const [cartItemLength, setCartItemLength] = useState();
   const { currentUser } = UserAuth();
   const navigate = useNavigate();
@@ -93,33 +95,92 @@ const Home = () => {
     }
   };
 
+  const addToFavorite = async (product) => {
+    console.log(product);
+    if (!currentUser) {
+      toast("Please Login First !");
+      return;
+    }
+    try {
+      const { uid } = currentUser;
+      const userRef = doc(db, "users", uid);
+      const favRef = collection(userRef, "favorites");
+
+      // Check if the product already exists in the favorites collection
+      const querySnapshot = await getDocs(favRef);
+      const existingFavorite = querySnapshot.docs.find(
+        (doc) => doc.data().id === product.id
+      );
+
+      if (existingFavorite) {
+        // If the product already exists, remove it from the favorites collection
+        await deleteDoc(doc(favRef, existingFavorite.id));
+        console.log("removed");
+      } else {
+        // Otherwise, add the product to the favorites collection
+        await addDoc(favRef, { ...product });
+        console.log("added");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFavorite = async () => {
+    const { uid } = currentUser;
+    const favRef = collection(db, "users", uid, "favorites");
+    let querySnapshot = await getDocs(favRef);
+    let favorites = querySnapshot.docs.map((doc) => ({
+      did: doc.id,
+      ...doc.data(),
+    }));
+
+    setFavorites(favorites);
+    console.log(favorites);
+
+    return favorites;
+  };
+
+  // // Check if the product is already a favorite on mount
+  // useEffect(() => {
+  //   getFavorite();
+  //   const checkFavorite = async () => {
+  //     if (!currentUser) {
+  //       return;
+  //     }
+  //     const { uid } = currentUser;
+  //     const favRef = collection(db, "users", uid, "favorites");
+  //     const querySnapshot = await getDocs(favRef);
+  //     const existingFavorite = querySnapshot.docs.find(
+  //       (doc) => doc.data().id === product.id
+  //     );
+  //     setIsFavorite(!!existingFavorite);
+  //   };
+  // }, [currentUser, product]);
+
   return (
     <>
       <ToastContainer />
       <Header products={cartItemLength} />
-      <div class="flex pl-4 pr-4  text-center justify-center items-center">
-        {/* <div>
-          <h2 class="text-3xl md:flex hidden font-medium">ALL Categories</h2>
-          <div class="mt-2 md:flex hidden">Choose from variety of items</div>
-        </div> */}
+      <div className="flex pl-4 pr-4  text-center justify-center items-center">
         <div
           onClick={() => {
             navigate("/categories");
           }}
-          class="  max-w-full font-bold text-center flex cursor-pointer items-center uppercase text-gray-500"
+          className="  max-w-full font-bold text-center flex cursor-pointer items-center uppercase text-gray-500"
         >
           All Categories
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="2"
+            strokeWidth="2"
             stroke="currentColor"
-            class="ml-1 w-4 h-4"
+            className="ml-1 w-4 h-4"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M8.25 4.5l7.5 7.5-7.5 7.5"
             ></path>
           </svg>
@@ -135,6 +196,9 @@ const Home = () => {
             >
               <div className="absolute z-10 top-3 right-3">
                 <button
+                  onClick={() => {
+                    addToFavorite(product);
+                  }}
                   type="button"
                   className="inline-flex items-center justify-center text-gray-400 hover:text-rose-500"
                 >
