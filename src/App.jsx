@@ -15,15 +15,15 @@ import Category from "./Components/Categories/Category";
 const App = () => {
   return (
     <>
-      <AuthProvider>
-        <Suspense
-          fallback={
-            <div
-              className=" flex m-auto items-center justify-center loader"
-              style={{ height: "80vh", width: "100vw" }}
-            ></div>
-          }
-        >
+      <Suspense
+        fallback={
+          <div
+            className=" flex m-auto items-center justify-center loader"
+            style={{ height: "80vh", width: "100vw" }}
+          ></div>
+        }
+      >
+        <AuthProvider>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/categories" element={<Categories />} />
@@ -64,8 +64,8 @@ const App = () => {
 
             <Route path="/product" element={<ProductInfo />} />
           </Routes>
-        </Suspense>
-      </AuthProvider>
+        </AuthProvider>
+      </Suspense>
     </>
   );
 };

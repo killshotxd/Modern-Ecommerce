@@ -29,9 +29,16 @@ const Checkout = () => {
     name: "",
     email: "",
   });
-  console.log(values);
+
   useEffect(() => {
-    setEditProduct(products);
+    if (products.length == 0) {
+      toast("No Products!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1300);
+    } else {
+      setEditProduct(products);
+    }
   }, []);
 
   const { currentUser } = UserAuth();
