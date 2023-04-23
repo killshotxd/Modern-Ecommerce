@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { UserAuth } from "../../Auth/AuthContext";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../Firebase";
 const Header = ({ products }) => {
   const { currentUser, logout } = UserAuth();
+  const [userInfo, setUserInfo] = useState(null);
   const [productLength, setProductLength] = useState();
 
   const navigate = useNavigate();
@@ -19,6 +20,48 @@ const Header = ({ products }) => {
       console.error();
     }
   };
+
+  const getUserInfo = async () => {
+    const { uid } = currentUser;
+    // Get user document reference using uid
+    const userDocRef = doc(db, "users", uid);
+
+    // Get user document snapshot
+    const userDocSnapshot = await getDoc(userDocRef);
+
+    // Check if the user document exists
+    if (userDocSnapshot.exists()) {
+      // Get user data
+      const userData = userDocSnapshot.data();
+
+      // Get user sub-collections
+      const userCollections = await getDocs(
+        collection(db, "users", uid, "myCollection")
+      );
+
+      // Map user sub-collection documents to an array
+      const userCollectionData = userCollections.docs.map((doc) => ({
+        did: doc.id,
+        ...doc.data(),
+      }));
+
+      // Combine user data and user sub-collection data
+      const userInfo = {
+        ...userData,
+        myCollection: userCollectionData,
+      };
+
+      setUserInfo(userInfo);
+
+      return userInfo;
+    } else {
+      console.log("User document does not exist.");
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   const getCartItem = async () => {
     let cartItemRef = await collection(db, "cart", `${currentUser.uid}/items`);
@@ -37,6 +80,7 @@ const Header = ({ products }) => {
     getCartItem();
   }, [products]);
 
+  console.log(userInfo);
   return (
     <>
       <div>
@@ -87,13 +131,23 @@ const Header = ({ products }) => {
                 {productLength ? `${productLength}` : 0}
               </div>
             </span>
-            {currentUser ? (
+            {currentUser && userInfo ? (
               <>
                 <div className="dropdown dropdown-end">
                   <div tabIndex={0} className="avatar online cursor-pointer">
                     <div className="w-10 rounded-full">
                       <img src={currentUser.photoURL} />
                     </div>
+                    {userInfo?.seller == true ? (
+                      <>
+                        {" "}
+                        <span className="badge-xs badge badge-accent text-white absolute top-7">
+                          Seller
+                        </span>
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <ul
                     tabIndex={0}
@@ -109,13 +163,21 @@ const Header = ({ products }) => {
                     >
                       <a>Accounts</a>
                     </li>
-                    <li
-                      onClick={() => {
-                        navigate("/welcomeSeller");
-                      }}
-                    >
-                      <a>Become Seller</a>
-                    </li>
+                    {userInfo.seller !== true ? (
+                      <>
+                        {" "}
+                        <li
+                          onClick={() => {
+                            navigate("/welcomeSeller");
+                          }}
+                        >
+                          <a>Become Seller</a>
+                        </li>
+                      </>
+                    ) : (
+                      ""
+                    )}
+
                     <li>
                       <p onClick={handleLogout}>Log Out</p>
                     </li>
