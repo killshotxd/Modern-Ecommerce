@@ -109,6 +109,13 @@ const Header = ({ products }) => {
                     >
                       <a>Accounts</a>
                     </li>
+                    <li
+                      onClick={() => {
+                        navigate("/welcomeSeller");
+                      }}
+                    >
+                      <a>Become Seller</a>
+                    </li>
                     <li>
                       <p onClick={handleLogout}>Log Out</p>
                     </li>
