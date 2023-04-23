@@ -37,7 +37,7 @@ const Cart = () => {
     localStorage.setItem("prLen", products.length);
 
     setProducts(products);
-
+    console.log(products);
     return products;
   };
 
