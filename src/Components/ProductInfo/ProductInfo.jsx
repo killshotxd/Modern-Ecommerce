@@ -231,7 +231,7 @@ const ProductInfo = () => {
                 <div className="flex justify-end space-x-4 py-4">
                   <button
                     onClick={() => {
-                      navigate("/categories");
+                      navigate("/");
                     }}
                     type="button"
                     className="px-6 py-2 font-bold border text-white  bg-purple-500 rounded-md dark:border-violet-400"
