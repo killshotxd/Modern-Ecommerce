@@ -4,7 +4,7 @@ import { BsInstagram, BsLinkedin } from "react-icons/bs";
 import { AiFillInstagram } from "react-icons/ai";
 const Footer = () => {
   return (
-    <footer className="container flex justify-between  mx-auto px-10  py-10">
+    <footer className="container flex justify-between   mx-auto px-10  py-10">
       <div className="flex items-center space-x-6">
         <div>
           <svg

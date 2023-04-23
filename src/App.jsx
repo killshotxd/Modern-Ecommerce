@@ -11,6 +11,7 @@ const ProductInfo = lazy(() => import("./Components/ProductInfo/ProductInfo"));
 import { PrivateRoute } from "./Routes/PrivateRoute";
 import Categories from "./Components/Categories/Categories";
 import Category from "./Components/Categories/Category";
+import Welcome from "./Components/Seller/Welcome";
 
 const App = () => {
   return (
@@ -63,6 +64,7 @@ const App = () => {
             />
 
             <Route path="/product" element={<ProductInfo />} />
+            <Route path="/welcomeSeller" element={<Welcome />} />
           </Routes>
         </AuthProvider>
       </Suspense>
