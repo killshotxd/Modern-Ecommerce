@@ -72,13 +72,14 @@ const Category = () => {
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-wrap -m-4">
             {products?.map((product) => (
-              <div key={product.name} className="lg:w-1/4 sm:w-1/2 p-4 w-full">
-                <a
-                  className="block relative h-48 rounded overflow-hidden"
-                  onClick={() => {
-                    navigate("/product", { state: product });
-                  }}
-                >
+              <div
+                onClick={() => {
+                  navigate("/product", { state: product });
+                }}
+                key={product.name}
+                className="lg:w-1/4 sm:w-1/2 p-4 w-full"
+              >
+                <a className="block relative h-48 rounded overflow-hidden">
                   <img
                     alt={product.name}
                     className="object-contain object-center w-full h-full block"

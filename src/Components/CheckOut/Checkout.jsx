@@ -24,6 +24,7 @@ const Checkout = () => {
   const { state } = useLocation();
   const { products } = state || {};
   const [editProduct, setEditProduct] = useState();
+  console.log(editProduct);
   const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
@@ -142,7 +143,7 @@ const Checkout = () => {
       "Quantity",
       "Category",
       "Price",
-      "Tax(6%)",
+      "GST(6%)",
       "Total",
     ];
     const data = products.map((product) => {
@@ -153,8 +154,8 @@ const Checkout = () => {
       return [
         product.name,
         product.color,
-        product.category,
         product.quantity,
+        product.category,
         price.toLocaleString("en-IN") + "Rs",
         tax.toLocaleString("en-IN") + "Rs",
         total.toLocaleString("en-IN") + "Rs",
@@ -203,9 +204,9 @@ const Checkout = () => {
     doc.save(`${Math.floor(Math.random() * 100)}invoice.pdf`);
 
     toast("Order Successful !");
-    navigate("/");
     removeCart();
     getCartItem();
+    navigate("/");
   };
 
   return (
@@ -370,7 +371,7 @@ const Checkout = () => {
                         <div>
                           <button
                             onClick={invoiceGen}
-                            className="rounded-md w-full bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
+                            className="rounded-md w-full bg-purple-500 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
                           >
                             Pay
                           </button>

@@ -156,13 +156,13 @@ const Admin = () => {
             <div>
               {/* <button
                 htmlFor="my-modal-4"
-                className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-sm font-semibold leading-7 text-white hover:bg-indigo-500 "
+                className="rounded-md bg-purple-500 px-3.5 py-1.5 text-sm font-semibold leading-7 text-white hover:bg-indigo-500 "
               >
                 Add
               </button> */}
               <label
                 htmlFor="my-modal-4"
-                className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-sm font-semibold leading-7 text-white hover:bg-indigo-500"
+                className="rounded-md bg-purple-500 px-3.5 py-1.5 text-sm font-semibold leading-7 text-white hover:bg-indigo-500"
               >
                 Add
               </label>

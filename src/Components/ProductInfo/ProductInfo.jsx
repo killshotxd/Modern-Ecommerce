@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../Auth/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,6 +19,7 @@ const ProductInfo = () => {
   const { state } = useLocation();
   const [cartItemLength, setCartItemLength] = useState();
   const [editProduct, setEditProduct] = useState([state] || {});
+  const navigate = useNavigate();
 
   //   useEffect(() => {
   //     setEditProduct(state || {});
@@ -209,7 +210,7 @@ const ProductInfo = () => {
                     onClick={() => {
                       addToCart(product);
                     }}
-                    className="ml-auto rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
+                    className="ml-auto rounded-md bg-purple-500 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
                   >
                     Add To Cart
                   </button>
@@ -225,6 +226,29 @@ const ProductInfo = () => {
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                     </svg>
                   </button>
+                </div>
+
+                <div className="flex justify-end space-x-4 py-4">
+                  <button
+                    onClick={() => {
+                      navigate("/categories");
+                    }}
+                    type="button"
+                    className="px-6 py-2 font-bold border text-white  bg-purple-500 rounded-md dark:border-violet-400"
+                  >
+                    Back
+                    {/* <span className="sr-only sm:not-sr-only"> </span> */}
+                  </button>
+                  {/* <button
+                    onClick={() => {
+                      navigate("/checkout", { state: { products } });
+                    }}
+                    type="button"
+                    className="px-6 py-2 border rounded-md dark:bg-violet-400 dark:text-gray-900 dark:border-violet-400"
+                  >
+                    <span className="sr-only sm:not-sr-only">Continue to</span>{" "}
+                    Checkout
+                  </button> */}
                 </div>
               </div>
             </div>

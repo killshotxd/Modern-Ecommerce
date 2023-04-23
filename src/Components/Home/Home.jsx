@@ -33,6 +33,7 @@ const Home = () => {
     }));
 
     setProducts(products);
+    console.log(products);
 
     return products;
   };
@@ -51,6 +52,7 @@ const Home = () => {
 
     localStorage.setItem("prLen", products.length);
     setCartItemLength(products?.length);
+
     return products;
   };
 
@@ -74,6 +76,7 @@ const Home = () => {
       const cartData = {
         brand: product.brand,
         color: product.color,
+        category: product.category,
         href: product.href,
         id: product.id,
         imageAlt: product.imageAlt,
@@ -162,12 +165,15 @@ const Home = () => {
     <>
       <ToastContainer />
       <Header products={cartItemLength} />
-      <div className="flex pl-4 pr-4  text-center justify-center items-center">
+      <p className="text-center w-full bg-purple-400 text-white p-2 font-bold">
+        6% GST IS APPLICABLE ON ALL PRODUCTS
+      </p>
+      <div className="flex pl-4 pr-4 pt-3 text-center justify-center items-center">
         <div
           onClick={() => {
             navigate("/categories");
           }}
-          className="  max-w-full font-bold text-center flex cursor-pointer items-center uppercase text-gray-500"
+          className="  max-w-full font-bold text-center flex cursor-pointer items-center uppercase text-gray-500 hover:text-black hover:shadow"
         >
           All Categories
           <svg
@@ -218,7 +224,12 @@ const Home = () => {
                   </svg>
                 </button>
               </div>
-              <div className="relative ">
+              <div
+                onClick={() => {
+                  navigate("/product", { state: product });
+                }}
+                className="relative "
+              >
                 <div className="aspect-w-1 aspect-h-1">
                   <img
                     className="object-contain w-full h-52 p-4"
@@ -231,12 +242,7 @@ const Home = () => {
                   <p className="text-xs font-medium tracking-widest text-gray-500 dark:text-gray-300 uppercase">
                     {product.brand}
                   </p>
-                  <h3
-                    onClick={() => {
-                      navigate("/product", { state: product });
-                    }}
-                    className="mt-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
+                  <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
                     <p>{product.name.slice(0, 30)}</p>
                   </h3>
                   <div className="flex items-center mt-2.5">
@@ -268,7 +274,7 @@ const Home = () => {
                     addToCart(product);
                   }}
                   type="button"
-                  className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-indigo-600"
+                  className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-purple-500"
                 >
                   <svg
                     className="w-5 h-5 mr-2"

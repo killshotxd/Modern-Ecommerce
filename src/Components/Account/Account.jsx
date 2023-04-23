@@ -48,7 +48,7 @@ const Account = () => {
               </p>
             </div>
             {/* <div>
-              <button className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-sm font-semibold leading-7 text-white hover:bg-indigo-500 ">
+              <button className="rounded-md bg-purple-500 px-3.5 py-1.5 text-sm font-semibold leading-7 text-white hover:bg-indigo-500 ">
                 Add
               </button>
             </div> */}
