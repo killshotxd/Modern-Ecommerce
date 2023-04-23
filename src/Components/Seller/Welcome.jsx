@@ -70,10 +70,10 @@ const Welcome = () => {
               endless. Plus, our dedicated support team is always here to help
               you along the way. Sign up now and start selling today!
             </p>
-            <div className="mt-4 flex items-center space-x-4">
+            <div className="mt-4 flex flex-col gap-3 items-center space-x-4">
               <input
                 type="text"
-                className="bg-white rounded h-full py-2.5 w-3/5 border border-gray-400/50 px-2"
+                className="bg-white rounded h-full py-2.5 w-full border border-gray-400/50 px-2"
                 placeholder="Why You want to become a seller?"
                 value={sellerInfo.reason}
                 onChange={(event) => handleInputChange(event, "reason")}
@@ -83,7 +83,7 @@ const Welcome = () => {
                 onClick={() => {
                   addNewSeller();
                 }}
-                className="btn btn-primary"
+                className=" rounded-md  px-3.5 py-2.5 text-sm font-semibold text-white  bg-purple-500"
               >
                 Get Started
               </button>

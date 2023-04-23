@@ -19,6 +19,7 @@ const AuthContext = createContext();
 //Provider Context
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
   // Sign In
@@ -33,6 +34,8 @@ export const AuthProvider = ({ children }) => {
       email: user.email,
       avatar: user.photoURL,
       uid: user.uid,
+      seller: false,
+      reason: "",
     };
     await setDoc(userRef, userData, { merge: true });
   };
