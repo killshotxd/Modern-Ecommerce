@@ -192,7 +192,7 @@ const Home = () => {
           </svg>
         </div>
       </div>
-      <div style={{ minHeight: "70vh" }}>
+      <div style={{ minHeight: "70vh" }} className="pl-3 pr-3">
         {/* ALL */}
         <div className="grid  px-2 grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:mt-10">
           {products?.map((product) => (
@@ -200,7 +200,7 @@ const Home = () => {
               key={product.name}
               className="relative overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-500 rounded-xl group"
             >
-              <div className="absolute z-10 top-3 right-3">
+              {/* <div className="absolute z-10 top-3 right-3">
                 <button
                   onClick={() => {
                     addToFavorite(product);
@@ -223,7 +223,7 @@ const Home = () => {
                     />
                   </svg>
                 </button>
-              </div>
+              </div> */}
               <div
                 onClick={() => {
                   navigate("/product", { state: product });
