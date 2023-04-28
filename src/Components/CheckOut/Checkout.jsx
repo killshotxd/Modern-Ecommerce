@@ -286,7 +286,7 @@ const Checkout = () => {
 
               <hr className="mt-6 border-gray-200" />
 
-              <form action="#" className="mt-6">
+              {/* <form action="#" className="mt-6">
                 <div className="sm:flex sm:space-x-2.5 md:flex-col lg:flex-row md:space-x-0 lg:space-x-2.5">
                   <div className="flex-grow">
                     <input
@@ -301,13 +301,13 @@ const Checkout = () => {
                     </button>
                   </div>
                 </div>
-              </form>
+              </form> */}
 
               <ul className="mt-6 space-y-3">
-                <li className="flex items-center justify-between text-gray-600 dark:text-gray-900">
+                {/* <li className="flex items-center justify-between text-gray-600 dark:text-gray-900">
                   <p className="text-sm font-medium">Sub total</p>
                   <p className="text-sm font-medium">{}</p>
-                </li>
+                </li> */}
 
                 <li className="flex items-center justify-between text-gray-900 dark:text-black">
                   <p className="text-sm font-medium ">Total</p>

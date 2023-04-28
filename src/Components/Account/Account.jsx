@@ -212,9 +212,9 @@ const Account = () => {
 
         {currentUser && userInfo?.seller == true ? (
           <>
-            <section className="container px-4 mx-auto py-4">
+            {/* <section className="container px-4 mx-auto py-4">
               <p>Add Products</p>
-            </section>{" "}
+            </section>{" "} */}
           </>
         ) : (
           ""

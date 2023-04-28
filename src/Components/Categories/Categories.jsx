@@ -52,7 +52,7 @@ const Categories = () => {
   return (
     <>
       <Header />
-      <div className="max-w-6xl px-4 mx-auto py-4 md:py-6 dark:text-gray-300 dark:bg-gray-900">
+      <div className="max-w-8xl px-8 mx-auto py-4 md:py-6 dark:text-gray-300 dark:bg-gray-900">
         <div className="flex md:text-left text-center md:justify-between justify-center items-center">
           <div>
             <h2 className="text-3xl font-medium">Popular Categories</h2>
